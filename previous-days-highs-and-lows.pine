@@ -1,0 +1,28 @@
+//@version = 4
+study(title="Previous days highs and lows00", overlay = true)
+   
+PrevBars = input(title = "Show previous highs and lows?", type =input.bool, defval=true)
+condition = not(timeframe.isweekly or timeframe.ismonthly) 
+
+h = security(syminfo.tickerid,"D",high,barmerge.gaps_off,barmerge.lookahead_on) 
+l = security(syminfo.tickerid,"D",low,barmerge.gaps_off,barmerge.lookahead_on)
+
+plotshape(series = condition and PrevBars ? h[1] : na, title = "Previous high",color = #0E6720,location=location.absolute ,transp=0,editable = true)
+plotshape(series = condition and PrevBars ? l[1] : na, title = "Previous low",color =#AF0D26,location = location.absolute ,transp=0, editable = true)
+
+// Draw lines from the previous highs and lows
+newSession = change(time('D'))
+count = barssince(newSession)
+
+
+vR1 = h  + (h - l) * 0.10
+vR2 = h  + (h - l) * 0.30
+
+vS1 = l - (h - l) * 0.10
+vS2 = l - (h - l) * 0.30
+
+vP1 = h - (h - l) *  0.50
+vP2 = l + (h - l) *  0.50
+
+plotshape(series = condition and PrevBars ? vR1[1] : na, title = "Previous high",color = #0E6720,location=location.absolute ,transp=0,editable = true)
+plotshape(series = condition and PrevBars ? vR2[1] : na, title = "Previous high",color = #0E6720,location=location.absolute ,transp=0,editable = true)
